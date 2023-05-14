@@ -20,7 +20,9 @@ type:Number,
 required:[true,'Please add the amount'],
 
 },
-
+image:{
+    type:String
+}
 },
 
 { timestamps:true 
