@@ -1,0 +1,21 @@
+.confirmation-popup {
+    text-align: center;
+}
+
+.confirmation-popup p {
+    font-size: 20px;
+}
+
+.confirmation-popup div {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.confirmation-popup #confirmation-delete-btn {
+    background: #e52f3f;
+}
+
+.confirmation-popup #confirmation-delete-btn:hover {
+    background: #d11a2a;
+}

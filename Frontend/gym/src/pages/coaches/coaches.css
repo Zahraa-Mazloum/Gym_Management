@@ -1,0 +1,47 @@
+.MuiPaper-root>.MuiToolbar-root {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+.delete-icon {
+    display: flex;
+    align-items: center;
+  }
+  .delete-icon svg {
+    margin-right: 5px;
+  }
+
+.MuiSvgIcon-root:hover,
+.MuiButtonBase-root:hover {
+    color: var(--dark-color) !important;
+}
+
+.MuiPaper-root>.MuiToolbar-root .MuiButtonBase-root,
+.MuiPaper-root>.MuiToolbar-root .MuiSvgIcon-root {
+    color: var(--secondary-color);
+}
+
+/* .addkpi{
+   margin-top: 10px;
+} */
+.coachTitle{
+    font-weight: bold;
+    font-size: 20px;
+    margin-left:5px ;
+    margin-top: -100px;
+}
+tr:nth-child(odd) {
+    background-color: var(--accent-color); 
+  }
+  
+tr:nth-child(even){
+    background-color: var(--secondary-color);
+}
+
+
+.table-container {
+    width: 97%; 
+    margin-top: 5%;
+    padding: 0; 
+    
+  }
+  

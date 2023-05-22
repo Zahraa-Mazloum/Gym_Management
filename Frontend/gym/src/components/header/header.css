@@ -1,0 +1,35 @@
+.header{
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right:40px ;
+    position: absolute;
+    top:2%;
+    left:86%
+}
+.Not_Time{
+    display: flex;
+}
+.time_date{
+    height: 70%;
+    padding: 7px 10px 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+}
+.time_date span{
+    color:#393A3C;
+}
+.time{
+    display: flex;
+    flex-direction: column;
+}
+.not{
+    font-size: 40px;
+    padding: 10px 10px 10px 10px;
+}
+.clock{
+    font-size: 35px;
+    margin-top: 4px;
+}
