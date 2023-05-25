@@ -120,8 +120,8 @@ console.log(email)
             </div>
           </form>
         </div>
-        <ToastContainer />
       </div>
+      <ToastContainer />
     </div>
   );
 }

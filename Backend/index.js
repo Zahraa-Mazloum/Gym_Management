@@ -28,7 +28,11 @@ const port = process.env.Port || 5000;
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cors());
+// app.use("/",(req,res,next)=>{
 
+//     console.log(req.body)
+//     next()
+// })
 app.use('/admin',adminRoutes)
 app.use('/coach',coachRoutes)
 app.use('/member',memberRoutes)

@@ -1,36 +1,32 @@
-import "./coaches.css";
+import "../coaches/coaches.css";
 import React, { useState, useEffect } from "react";
-import CoachPopup from "../../components/addCoachPopup/coachPopup.js";
+import SalaryPopup from "../../components/addSalaryPopup/addSalaryPopup.js";
 import axios from '../../api/axios';
 import MUIDataTable from "mui-datatables";
 import debounce from "lodash/debounce";
 import { Box } from "@mui/system";
 import Loader from "../../components/loader/loader";
-import { AiOutlinePlus } from "react-icons/ai";
 import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from 'react-toastify';
 import Button from "@mui/material/Button";
 import 'react-toastify/dist/ReactToastify.css';
-import {RiUserAddLine} from 'react-icons/ri'
+import {RiUserAddLine} from 'react-icons/ri';
+import moment from "moment";
 
-function createData(id, first_name, middle_name, last_name, phone) {
+
+function createData(id, coach, amount,createdAt) {
   return {
     id,
-    first_name,
-    middle_name,
-    last_name,
-    phone,
-    // created_at,
-    // updated_at,
+    coach,
+    amount,
+    createdAt,
   };
 }
 
-function Coaches(props) {
+function Salaries(props) {
   const [Loading, setLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [editingRow, setEditingRow] = useState(null);
@@ -72,30 +68,26 @@ function Coaches(props) {
 
   const handleRowSelection = (currentRowsSelected, allRowsSelected, rowsSelected) => {
     // console.log(currentRowsallRowsSelectedSelected)
- 
     // setSelectedRows(rowsSelected);
     // setSelectedRowsExist(rowsSelected.length > 0);
   };
-
   useEffect(() => {
     setLoading(true);
-    document.title = "Coaches";
+    document.title = "Salaries";
     getData();
   }, []);
 
   function openCoachPopup() {
-    document.querySelector(".coach-popup").showModal();
+    document.querySelector(".salary-popup").showModal();
   }
   const rows =
     Data ||
     [].map((item) =>
       createData(
         item.id,
-        item.first_name,
-        item.middle_name,
-        item.last_name,
-        item.phone,
-        // item.created_at,
+        item.coach,
+        item.amount,
+        item.createdAt,
         // item.updated_at
       )
     );
@@ -107,9 +99,8 @@ function Coaches(props) {
 
   const getData = () => {
     axios
-      .get("coach/getCoaches")
+      .get("salary/getSalaries")
       .then((response) => {
-        console.log(response.data)
         setData(response.data);
         setLoading(false);
       })
@@ -122,12 +113,11 @@ function Coaches(props) {
     setEditingRow(true);
     console.log(rowData[0])
     axios
-      .put(`coach/editCoach/${rowData[0]}`,
+      .put(`salary/editSalary/${rowData[0]}`,
         {
-          first_name: rowData[1],
-          middle_name: rowData[2],
-          last_name: rowData[3],
-          phone: rowData[4],
+          coach: rowData[1],
+          amount: rowData[2],
+          createdAt: rowData[3],
         },
       )
       .then((response) => {
@@ -139,14 +129,6 @@ function Coaches(props) {
       });
   };
 
-  // const showConfirmationBox = () => {
-  //   document.querySelector(".confirmation-popup").showModal();
-  // };
-
-  // const showEditBox = () => {
-  //   document.querySelector(".edit-popup").showModal();
-  // };
-
   const columns = [
     {
       name: "_id",
@@ -155,19 +137,46 @@ function Coaches(props) {
         display: "excluded",
       },
     },
+ 
     {
-      name: "first_name",
-      label: "First Name",
+      name: "coach",
+      label: "Coach",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           const rowIndex = tableMeta.rowIndex;
           const isEditing = rowIndex === editingRow;
-
+    
+          const fullName = value ? `${value.first_name} ${value.last_name}` : "This patient is deleted";
+    
           return (
-            <div
-              style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
+            <div style={{ paddingLeft: "12%" }}>
+              {isEditing ? (
+                <input
+                  className="EditInput"
+                  value={fullName}
+                  onChange={(e) => {
+                    updateValue(e.target.value);
+                  }}
+                />
+              ) : (
+                fullName
+              )}
+            </div>
+          );
+        },
+        editable: true,
+      },
+    },
+    {
+      name: "amount",
+      label: "Amount",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const rowIndex = tableMeta.rowIndex;
+          const isEditing = rowIndex === editingRow;
+    
+          return (
+            <div style={{ paddingLeft: "12%" }}>
               {isEditing ? (
                 <input
                   className="EditInput"
@@ -185,105 +194,14 @@ function Coaches(props) {
         editable: true,
       },
     },
+    
     {
-      name: "middle_name",
-      label: "Middle Name",
+      name: "createdAt",
+      label: "Date",
       options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
+        customBodyRender: (value) => moment(value).format("DD-MM-YYYY"),
       },
     },
-    {
-      name: "last_name",
-      label: "Last Name",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-    {
-      name: "phone",
-      label: "Phone",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "9%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-
-    // {
-    //   name: "created_at",
-    //   label: "Created At",
-    // },
-    // {
-    //   name: "updated_at",
-    //   label: "Updated At",
-    // },
     {
       name: "actions",
       label: "Actions",
@@ -320,7 +238,7 @@ function Coaches(props) {
                       if (result.isConfirmed) {
                         handleUpdate(rowData);
                         getData()
-                        toast.success('Coach edited successfully')
+                        toast.success('Salary edited successfully')
                       }
                     });
                   }}
@@ -373,9 +291,9 @@ function Coaches(props) {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       axios
-                        .delete(`coach/deleteCoach/${rowData[0]}`)
+                        .delete(`salary/deleteSalary/${rowData[0]}`)
                         .then((response) => {
-                          toast.success("Coach deleted successfully")
+                          toast.success("Salary deleted successfully")
                           getData();
                         })
                         .catch((err) => {
@@ -398,7 +316,7 @@ function Coaches(props) {
     selectableRows: "multiple",
     selectToolbarPlacement: "replace",
     search: true,
-    searchPlaceholder: "Search for Coach",
+    searchPlaceholder: "Search for Salary",
     onSearchChange: (searchValue) => handleSearch(searchValue),
     download: true,
     print: false,
@@ -411,23 +329,7 @@ function Coaches(props) {
     viewColumns: true,
     onRowsDelete:deleteCoachesByIds,
     onRowsSelect: handleRowSelection,
-    // customToolbar: () => (
-    //   <DeleteSweepOutlinedIcon
-    //     sx={{
-    //       color: "#393A3C",
-    //       cursor: "pointer",
-    //       justifyItems: "center",
-    //       alignItems: "center",
-    //       "&:hover": {
-    //         transform: "scale(1.3)",
-    //         transition: "0.2s ease-out",
-    //       },
-    //     }}
-    //     className="delete-all-btn"
-    //     onClick={deleteCoachesByIds}
-    //     style={{ display: selectedRowsExist ? "inline-block" : "none" }}
-    //   />
-    // )
+
   };
 
   return (
@@ -438,7 +340,7 @@ function Coaches(props) {
         </div>
       ) : (
         <div className="table-container">
-          <h1 className="titleOfPage "> Coaches </h1>
+          <h1 className="titleOfPage "> Salaries </h1>
           <Box sx={{ maxWidth: "100%", margin: "auto" }}>
             <MUIDataTable
               title={
@@ -460,7 +362,7 @@ function Coaches(props) {
                   className="addCoach"
                   onClick={openCoachPopup}
                 >
-                  <span style={{ color: "#393A3C" }}>Add coach</span>
+                  <span style={{ color: "#393A3C" }}>Add salary</span>
                 </Button>
               </div>
               }
@@ -470,7 +372,7 @@ function Coaches(props) {
             // onRowsSelect={handleRowSelection} 
 
             />
-              <CoachPopup getData={getData} />
+              <SalaryPopup getData={getData} />
           </Box>
           <ToastContainer />
         </div>
@@ -478,4 +380,4 @@ function Coaches(props) {
     </>
   );
 }
-export default Coaches;
+export default Salaries;

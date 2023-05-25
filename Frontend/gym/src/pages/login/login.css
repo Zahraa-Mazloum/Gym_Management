@@ -39,11 +39,11 @@
 
   .frgtpass a{ 
     position: absolute;
-        right:13%;
+        right:17%;
         margin-top: -20px;
         font-size: 13px;
         color: var(--dark-color);
-        /* text-decoration: none; */
+        text-decoration: none;
 
   }
 
@@ -97,7 +97,7 @@
   
   .btn-primary {
       background-color: var(--primary-color);
-      color: var(--accent-color);
+      color: var(--secondary-color);
       font-weight: bold;
       letter-spacing: .5px;
       text-shadow: 1px 1px 3px rgba(0,0,0,.14);
@@ -137,7 +137,6 @@
     background-color: white;
     border-radius: 10px;
     width: 25%;
-
 
     
 }
@@ -232,7 +231,7 @@
   
   .input-group {
       position: relative;
-      margin-bottom: 24px;
+      margin-bottom: 24px;  
       width:350px;
   }
   

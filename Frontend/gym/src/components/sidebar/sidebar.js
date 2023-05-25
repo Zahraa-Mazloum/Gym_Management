@@ -46,7 +46,7 @@ const Sidebar = () => {
       name: 'Coaches',
       subItems: [
         { id: 1, name: 'Coaches',link:'/Coaches' },
-        { id: 2, name: 'Salary' },
+        { id: 2, name: 'Salary',link:'/Salaries' },
       ],
     },
     {

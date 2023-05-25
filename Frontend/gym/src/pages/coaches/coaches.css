@@ -20,10 +20,10 @@
     color: var(--secondary-color);
 }
 
-/* .addkpi{
-   margin-top: 10px;
-} */
-.coachTitle{
+.blur {
+  filter: blur(5px);
+}
+.coachtitle{
     font-weight: bold;
     font-size: 20px;
     margin-left:5px ;
@@ -45,3 +45,12 @@ tr:nth-child(even){
     
   }
   
+.titleOfPage{
+color:var(--dark-color);
+text-align: center;
+font-weight: bold;
+}
+
+.iconAddForm{
+  color:#393A3C
+}

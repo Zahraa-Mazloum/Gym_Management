@@ -16,7 +16,7 @@ export const addMember = asyncHandler(async (req, res) => {
     try {
       const {first_name, middle_name, last_name, phone,gender,dob,address,bloodTypes,emergecnyPhone,isArmy} = req.body;
   
-      if (!first_name || !middle_name || !last_name || !phone || !gender || !address || isArmy ) {
+      if (!first_name || !middle_name || !last_name || !phone || !gender || !address || !isArmy ) {
         res.status(400);
         throw new Error('Please enter all fields');
       }

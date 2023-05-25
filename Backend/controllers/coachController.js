@@ -52,18 +52,37 @@ export const getCoachById =asyncHandler(async (req, response) => {
     }
 })
 
-export const editcoach =asyncHandler(async (req, response) => {
-    let coach = req.body;
+export const editCoach = asyncHandler(async (req, response) => {
+  const coachId = req.params.id;
+  const { first_name, middle_name, last_name, phone } = req.body;
 
-    const editcoach = new Coach(coach);
-    try{
-        await Coach.updateOne({_id: req.params.id}, editcoach);
-        response.status(201).json(editcoach);
-    } catch (error){
-        response.status(409).json({ message: error.message});     
+  try {
+    const coach = await Coach.findById(coachId);
+    if (coach) {
+      if (first_name) {
+        coach.first_name = first_name;
+      }
+      if (middle_name) {
+        coach.middle_name = middle_name;
+      }
+      if (last_name) {
+        coach.last_name = last_name;
+      }
+      if (phone) {
+        coach.phone = phone;
+      }
+
+      const updatedCoach = await coach.save();
+      response.status(200).json(updatedCoach);
+    } else {
+      response.status(404);
+      throw new Error('Coach not found');
     }
-}
-)
+  } catch (error) {
+    response.status(500).json({ message: error.message });
+  }
+});
+
 
 export const deletecoach = asyncHandler(async (req, response) => {
     try{
@@ -73,6 +92,21 @@ export const deletecoach = asyncHandler(async (req, response) => {
         response.status(409).json({ message: error.message});     
     }
 })
+export const deleteCoaches = asyncHandler(async (req, res) => {
+  const ids = req.params.ids.split(",")
+  try {
+    const result = await Coach.deleteMany({ _id: { $in: ids } });
 
-const coachRoutes = { getCoaches, getCoachById, addCoach, editcoach, deletecoach }
+    if (result.deletedCount > 0) {
+      res.status(200).json({ success:true,message: 'Coaches have been removed' });
+    } else {
+      res.status(404).json({ message: 'No Coach found with the provided IDs' });
+    }
+  } catch (error) {
+    console.error('Error deleting Coaches:', error);
+    res.status(500).json({ message: 'An error occurred while deleting Coaches' });
+  }
+});
+
+const coachRoutes = { getCoaches, getCoachById, addCoach, editCoach, deletecoach ,deleteCoaches }
 export default coachRoutes  

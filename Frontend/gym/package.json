@@ -16,6 +16,7 @@
     "js-cookie": "^3.0.4",
     "js-cookies": "^1.0.4",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "mui-datatables": "^4.3.0",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
