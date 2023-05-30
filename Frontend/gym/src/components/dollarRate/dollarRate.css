@@ -1,0 +1,76 @@
+.card {
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 50px;
+    width:100%
+  }
+  .card-content{
+    display: flex;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .card-text {
+    font-size: 16px;
+    margin-top: 31px;
+    margin-left: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+
+  }
+  
+  .btnRate {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    margin-top: 10px;
+
+  }
+    
+  .btnRate:hover {
+    background-color: var(--dark-color);
+    color: var(--secondary-color);
+    border: none;
+    margin-top: 10px;
+
+  }
+  
+  .btn-link {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px;
+    cursor: pointer;    
+    border-radius: 4px;
+    margin-left: 50px;
+  }
+  

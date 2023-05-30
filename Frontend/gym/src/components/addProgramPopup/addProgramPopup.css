@@ -1,0 +1,158 @@
+#modal .containerPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(8px); 
+    /* z-index: 9999;  */
+  }
+  
+  #modal .popUp {
+    width: 620px;
+    max-width: 90%;
+    border-radius: 10px;
+    background-color: var(--secondary-color);
+    transition: 200ms cubic-bezier(0.46, 0.03, 0.52, 0.96);
+    position: absolute;
+    top:10%;
+    left:40%;
+  } 
+  
+  #modal .close-x {
+    height: 20px;
+    width: 20px;
+    margin-left: 92.7%;
+    margin-top: 10px;
+    display: block;
+    padding: 4px;
+    color: #000;
+    transition: .25s all ease-in-out;
+  }
+  
+  #modal .close-x:hover {
+    background:var(--secondary-color);
+    cursor: pointer;
+  }
+  
+  #modal fieldset {
+    border: 0;
+    position: relative;
+  
+  }
+  
+  .selectForm{
+    height: 60px;
+    width: 97%;
+    padding: 6px 28px 6px 13px;
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    outline: 0;
+    font-size: 16px;
+    transition: all .5s ease;
+    box-sizing: border-box;
+    margin-bottom: 5%;
+    margin-left: 2%;
+  }
+  
+  #modal input {
+    height: 60px;
+    width: 97%;
+    padding: 6px 28px 6px 13px;
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    /* box-shadow: 1px 1px 3px #00000035;   */
+    outline: 0;
+    font-size: 16px;
+    transition: all .5s ease;
+    box-sizing: border-box;
+    margin-bottom: 5%;
+    margin-left: 2%;
+  }
+  #modal input:focus {
+    border: 2px solid var(--dark-color);
+    opacity:1; 
+  }
+  #modal input:focus + .iconForm{
+    opacity:1; 
+    color: var(--dark-color);
+  } 
+  
+  #modal label {
+    padding: 0 4px;
+    position: absolute;
+    top: -4px;
+    left: 32px;
+    color: var(--dark-color);
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--secondary-color);
+  }
+  .btnsGrp{
+    display: flex;
+    gap: 5%;
+    justify-content: flex-end;
+    margin-right:14px;
+  }
+  #modal button {
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .14);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 19px;
+    color: var(--secondary-color);
+    letter-spacing: .5px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, .14);
+    transition: all .5s ease;
+    margin-right: 1.5%;
+  
+  }
+  .createBtn{
+    background-color: var(--primary-color);
+  
+  }
+  .closeBtn{
+    background-color: var(--dark-color);
+  
+  }
+  #modal button:hover {
+    background: var(--accent-color);
+    color: var(--dark-color);
+  }
+  
+  
+  .formTitle{
+    text-align: center;
+    color:var(--dark-color);
+    font-weight: bold;
+    font-size: 25px;
+    margin-top:-5%
+  }
+  
+  .iconForm{
+    position: absolute;
+    top: 12%;
+    left:89%;
+    font-size: 42px;
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+
+
+  .checkboxGroup {
+    display: flex;
+  }
+  
+  .checkboxItem {
+    margin-left: 21px;
+    margin-bottom: 50px;
+    width:10%;
+    height:50px;
+    font-size: 12px;
+    
+  }
+  

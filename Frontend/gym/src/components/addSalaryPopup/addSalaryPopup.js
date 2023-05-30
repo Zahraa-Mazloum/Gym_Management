@@ -4,7 +4,6 @@ import axios from "../../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
-import { TextField, Button, Select, MenuItem } from "@mui/material";
 
 export default function SalaryPopup(props) {
   const [coach, setCoach] = useState("");
@@ -95,7 +94,7 @@ export default function SalaryPopup(props) {
             <fieldset>
               <label>Amount</label>
               <input
-                type="text"
+                type="number"
                 required
                 placeholder="Example: 300"
                 value={amount}

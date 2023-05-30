@@ -1,6 +1,6 @@
-import "../coaches/coaches.css";
+import "./expense.css";
 import React, { useState, useEffect } from "react";
-import MemberPopup from "../../components/addMemberPopup/addMemberPopup.js";
+import ExpensePopup from "../../components/addExpensePopup/addExpensePopup.js";
 import axios from '../../api/axios';
 import MUIDataTable from "mui-datatables";
 import debounce from "lodash/debounce";
@@ -17,39 +17,29 @@ import { ToastContainer, toast } from 'react-toastify';
 import Button from "@mui/material/Button";
 import 'react-toastify/dist/ReactToastify.css';
 import {RiUserAddLine} from 'react-icons/ri';
-import Switch from 'react-toggle-switch';
-import 'react-toggle-switch/dist/css/switch.min.css';
+import moment from 'moment'
 
-
-function createData(id, first_name, middle_name, last_name, phone,gender,date,address,emergencyPhone,army,status) {
+function createData(id, description, amount,created_at) {
   return {
     id,
-    first_name,
-    middle_name,
-    last_name,
-    phone,
-    gender,
-    date,
-    address,
-    emergencyPhone,
-    army,
-    status
-    // created_at,
+    description,
+    amount,
+    created_at,
     // updated_at,
   };
 }
 
-function Members(props) {
+function Expenses(props) {
   const [Loading, setLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [editingRow, setEditingRow] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedRowsExist, setSelectedRowsExist] = useState(false);
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
-  const [stateCoaches, setCoachesState] = useState([]);
+  const [stateExpenses, setExpensesState] = useState([]);
   const [deleteId, setDeleteId] = useState([])
 
-  const deleteCoachesByIds = (e) => {
+  const deleteExpensesByIds = (e) => {
     const selectedDelete = e.data.map((value, index) => {
       return Data[index + 1]._id;
     });
@@ -63,9 +53,9 @@ function Members(props) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/coach/deleteCoaches/${selectedDelete.join(",")}`)
+        axios.delete(`/coach/deleteExpenses/${selectedDelete.join(",")}`)
         .then((response) => {
-          toast.success("Members deleted successfully")
+          toast.success("Expenses deleted successfully")
           getData();
         })
           .catch(e => {
@@ -88,29 +78,21 @@ function Members(props) {
 
   useEffect(() => {
     setLoading(true);
-    document.title = "Members";
+    document.title = "Expenses";
     getData();
   }, []);
 
-  function openMemberPopup() {
-    document.querySelector(".member-popup").showModal();
+  function openExpensePopup() {
+    document.querySelector(".expense-popup").showModal();
   }
   const rows =
     Data ||
     [].map((item) =>
       createData(
         item.id,
-        item.first_name,
-        item.middle_name,
-        item.last_name,
-        item.phone,
-        item.gender,
-        item.date,
-        item.address,
-        item.emergencyPhone,
-        item.army,
-        item.status,
-        // item.created_at,
+        item.description,
+        item.amount,
+        item.createdAt,
         // item.updated_at
       )
     );
@@ -122,7 +104,7 @@ function Members(props) {
 
   const getData = () => {
     axios
-      .get("member/getMembers")
+      .get("expense/getExpenses")
       .then((response) => {
         console.log(response.data)
         setData(response.data);
@@ -137,18 +119,11 @@ function Members(props) {
     setEditingRow(true);
     console.log(rowData[0])
     axios
-      .put(`member/editMember/${rowData[0]}`,
+      .put(`expense/editExpense/${rowData[0]}`,
         {
-          first_name: rowData[1],
-          middle_name: rowData[2],
-          last_name: rowData[3],
-          phone: rowData[4],
-          emergencyPhone:rowData[5],
-          gender: rowData[6],
-          date: rowData[7],
-          address: rowData[8],
-          army:rowData[9]
-
+          description: rowData[1],
+          amount: rowData[2],
+          createdAt: rowData[3],
         },
       )
       .then((response) => {
@@ -171,8 +146,37 @@ function Members(props) {
       },
     },
     {
-      name: "first_name",
-      label: "First Name",
+      name: "description",
+      label: "Description",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const rowIndex = tableMeta.rowIndex;
+          const isEditing = rowIndex === editingRow;
+
+          return (
+            <div
+              style={{ paddingLeft: "1.8%" }}
+            >
+              {isEditing ? (
+                <input
+                  className="EditInput"
+                  value={value}
+                  onChange={(e) => {
+                    updateValue(e.target.value);
+                  }}
+                />
+              ) : (
+                value
+              )}
+            </div>
+          );
+        },
+        editable: true,
+      },
+    },
+    {
+      name: "amount",
+      label: "Amount",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           const rowIndex = tableMeta.rowIndex;
@@ -181,7 +185,6 @@ function Members(props) {
           return (
             <div
               style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
             >
               {isEditing ? (
                 <input
@@ -200,283 +203,14 @@ function Members(props) {
         editable: true,
       },
     },
-    {
-      name: "middle_name",
-      label: "Middle Name",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
 
-          return (
-            <div
-              style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
     {
-      name: "last_name",
-      label: "Last Name",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-    {
-      name: "phone",
-      label: "Phone",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "9%" }}
-            // onClick={() => setEditingRow(rowIndex)}
-            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-    {
-      name: "emergencyPhone",
-      label: "Emergency Phone",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div
-              style={{ paddingLeft: "22%" }}            >
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-    {
-        name: "gender",
-        label: "Gender",
+        name: "createdAt",
+        label: "Date",
         options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
-  
-            return (
-              <div
-                style={{ paddingLeft: "12%" }}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
+          customBodyRender: (value) => moment(value).format("DD-MM-YYYY"),
         },
       },
-      {
-        name: "date",
-        label: "Birthday",
-        options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
-  
-            return (
-              <div
-                style={{ paddingLeft: "9%" }}
-              // onClick={() => setEditingRow(rowIndex)}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
-        },
-      },
-      {
-        name: "address",
-        label: "Address",
-        options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
-  
-            return (
-              <div
-                style={{ paddingLeft: "9%" }}
-              // onClick={() => setEditingRow(rowIndex)}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
-        },
-      },
-
-      {
-        name: "army",
-        label: "Army",
-        options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
-  
-            return (
-              <div
-                style={{ paddingLeft: "17%" }}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
-        },
-      },
-      {
-        name: "status",
-        label: "Active",
-        options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
-  
-            return (
-              <div
-                style={{ paddingLeft: "9%" }}
-              // onClick={() => setEditingRow(rowIndex)}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
-        },
-      },
-      
-      
-    // {
-    //   name: "created_at",
-    //   label: "Created At",
-    // },
-    // {
-    //   name: "updated_at",
-    //   label: "Updated At",
-    // },
     {
       name: "actions",
       label: "Actions",
@@ -513,7 +247,7 @@ function Members(props) {
                       if (result.isConfirmed) {
                         handleUpdate(rowData);
                         getData()
-                        toast.success('Member edited successfully')
+                        toast.success('Expense edited successfully')
                       }
                     });
                   }}
@@ -566,9 +300,9 @@ function Members(props) {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       axios
-                        .delete(`coach/deleteCoach/${rowData[0]}`)
+                        .delete(`expense/deleteExpense/${rowData[0]}`)
                         .then((response) => {
-                          toast.success("Coach deleted successfully")
+                          toast.success("Expense deleted successfully")
                           getData();
                         })
                         .catch((err) => {
@@ -602,9 +336,9 @@ function Members(props) {
     rowsPerPageOptions: [5, 7],
     rowHover: true,
     viewColumns: true,
-    onRowsDelete:deleteCoachesByIds,
+    onRowsDelete:deleteExpensesByIds,
     onRowsSelect: handleRowSelection,
-
+  
   };
 
   return (
@@ -615,7 +349,7 @@ function Members(props) {
         </div>
       ) : (
         <div className="table-container">
-          <h1 className="titleOfPage "> Members </h1>
+          <h1 className="titleOfPage "> Expenses </h1>
           <Box sx={{ maxWidth: "100%", margin: "auto" }}>
             <MUIDataTable
               title={
@@ -635,9 +369,9 @@ function Members(props) {
                     },
                   }}
                   className="addCoach"
-                  onClick={openMemberPopup}
+                  onClick={openExpensePopup}
                 >
-                  <span style={{ color: "#393A3C" }}>Add Member</span>
+                  <span style={{ color: "#393A3C" }}>Add Expense</span>
                 </Button>
               </div>
               }
@@ -647,7 +381,7 @@ function Members(props) {
             // onRowsSelect={handleRowSelection} 
 
             />
-              <MemberPopup getData={getData} />
+              <ExpensePopup getData={getData} />
           </Box>
           <ToastContainer />
         </div>
@@ -655,4 +389,4 @@ function Members(props) {
     </>
   );
 }
-export default Members;
+export default Expenses;

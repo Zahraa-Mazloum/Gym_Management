@@ -1,9 +1,10 @@
 import React from 'react';
+import DollarRate from '../../components/dollarRate/dollarRate.js'
 
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Hey</h1>
+    <div className='dollarRates'>
+      <DollarRate />
     </div>
   );
 };

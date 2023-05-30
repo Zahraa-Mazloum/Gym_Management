@@ -33,10 +33,10 @@ function Salaries(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedRowsExist, setSelectedRowsExist] = useState(false);
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
-  const [stateCoaches, setCoachesState] = useState([]);
+  const [stateSalaries, setSalariesState] = useState([]);
   const [deleteId, setDeleteId] = useState([])
 
-  const deleteCoachesByIds = (e) => {
+  const deleteSalariesByIds = (e) => {
     const selectedDelete = e.data.map((value, index) => {
       return Data[index + 1]._id;
     });
@@ -50,9 +50,9 @@ function Salaries(props) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/coach/deleteCoaches/${selectedDelete.join(",")}`)
+        axios.delete(`/coach/deleteSalaries/${selectedDelete.join(",")}`)
         .then((response) => {
-          toast.success("Coaches deleted successfully")
+          toast.success("Salaries deleted successfully")
           getData();
         })
           .catch(e => {
@@ -327,7 +327,7 @@ function Salaries(props) {
     rowsPerPageOptions: [5, 7],
     rowHover: true,
     viewColumns: true,
-    onRowsDelete:deleteCoachesByIds,
+    onRowsDelete:deleteSalariesByIds,
     onRowsSelect: handleRowSelection,
 
   };

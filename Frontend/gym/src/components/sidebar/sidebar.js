@@ -54,17 +54,17 @@ const Sidebar = () => {
       icon: <FaUsers />,
       name: 'Members',
       subItems: [
-        { id:1, name: 'Members' },
-        { id: 2, name: 'MemberShip' },
-        { id: 3, name: 'Payment' },
-        { id: 4, name: 'Attendance' },
+        { id:1, name: 'Members',link:'/Member' },
+        { id: 2, name: 'MemberShip' ,link:'/Membership' },
+        { id: 3, name: 'Payment',link:'/Payment' },
+        // { id: 4, name: 'Attendance' },
       ],
     },
     {
       id: 4,
       icon: <MdSportsGymnastics />,
       name: 'Programs',
-      link: '/dashboard',
+      link: '/Program',
 
     },
     {
@@ -72,9 +72,9 @@ const Sidebar = () => {
       icon: <MdOutlineAttachMoney />,
       name: 'Finance',
       subItems: [
-        { id:1, name: 'Income' },
-        { id: 2, name: 'Debt' },
-        { id: 3, name: 'Expense' },
+        { id:1, name: 'Income',link:'/Income' },
+        { id: 2, name: 'Debt',link:'/Debt' },
+        { id: 3, name: 'Expenses',link:'/Expense' },
       ],
     },
     {
