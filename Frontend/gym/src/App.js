@@ -10,7 +10,8 @@ import Member from './pages/member/member.js';
 import Program from './pages/programs/programs.js';
 import Membership from'./pages/Membership/membership.js';
 import Debt from './pages/debt/debt.js';
-import Payment from './pages/payment/payment.js'
+import Payment from './pages/payment/payment.js';
+import Income  from  './pages/income/income.js'
 
 function App() {
   return (
@@ -28,8 +29,7 @@ function App() {
       <Route path="Membership" element={<Membership />} />
       <Route path="Debt" element={<Debt/>} />
       <Route path="Payment" element={<Payment/>}/>
-
-
+      <Route path="Income" element={<Income/>} />
 
 
             </Route>

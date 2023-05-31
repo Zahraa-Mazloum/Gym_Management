@@ -1,6 +1,6 @@
 import "../coaches/coaches.css";
 import React, { useState, useEffect } from "react";
-import DebtPopup from "../../components/addDebtPopup/addDebtPopup.js";
+import IncomePopup from "../../components/addIncomePopup/addIncomePopup.js";
 import axios from '../../api/axios';
 import MUIDataTable from "mui-datatables";
 import debounce from "lodash/debounce";
@@ -17,17 +17,17 @@ import {RiUserAddLine} from 'react-icons/ri';
 import moment from "moment";
 
 
-function createData(id,createdAt,member,notes) {
+function createData(id,createdAt,description,amount) {
   return {
     id,
-    member,
-    notes,
+    description,
+    amount,
     createdAt
    
   };
 }
 
-function Debt(props) {
+function Income(props) {
   const [Loading, setLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [editingRow, setEditingRow] = useState(null);
@@ -76,20 +76,20 @@ function Debt(props) {
   };
   useEffect(() => {
     setLoading(true);
-    document.title = "Debt";
+    document.title = "Income";
     getData();
   }, []);
 
   function openMembershipPopup() {
-    document.querySelector(".debt-popup").showModal();
+    document.querySelector(".income-popup").showModal();
   }
   const rows =
     Data ||
     [].map((item) =>
       createData(
         item.id,
-        item.member,
-        item.notes,
+        item.description,
+        item.amount,
         item.createdAt
 
       )
@@ -102,7 +102,7 @@ function Debt(props) {
 
   const getData = () => {
     axios
-      .get("debt/getDebts")
+      .get("income/getIncomes")
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -116,13 +116,13 @@ function Debt(props) {
     setEditingRow(true);
     console.log(rowData[0])
     axios
-      .put(`debt/editDebt/${rowData[0]}`,
+      .put(`income/editIncome/${rowData[0]}`,
         {
-          member: rowData[1],
+          description: rowData[1],
           amount: rowData[2],
-          notes: rowData[3],
+          priceLbp:rowData[3],
           createdAt:rowData[4],
-       
+          
 
         },
       )
@@ -146,75 +146,17 @@ function Debt(props) {
     },
 
     {
-      name: "member",
-      label: "Member",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-    
-          const fullName = value ? `${value.first_name} ${value.middle_name} ${value.last_name}` : "This member is deleted";
-    
-          return (
-            <div style={{ paddingLeft: "12%" }}>
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={fullName}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                fullName
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-
-    {
-      name: "amount",
-      label: "Amount",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const rowIndex = tableMeta.rowIndex;
-          const isEditing = rowIndex === editingRow;
-
-          return (
-            <div style={{ paddingLeft: "12%" }}>
-                            <span className="input-group-addon">$ </span>
-
-              {isEditing ? (
-                <input
-                  className="EditInput"
-                  value={value}
-                  onChange={(e) => {
-                    updateValue(e.target.value);
-                  }}
-                />
-              ) : (
-                  value
-              )}
-            </div>
-          );
-        },
-        editable: true,
-      },
-    },
-  
-      {
-        name: "notes",
+        name: "description",
         label: "Description",
         options: {
           customBodyRender: (value, tableMeta, updateValue) => {
             const rowIndex = tableMeta.rowIndex;
             const isEditing = rowIndex === editingRow;
-
+  
             return (
-              <div style={{ paddingLeft: "12%" }}>
+              <div
+                style={{ paddingLeft: "12%" }}
+              >
                 {isEditing ? (
                   <input
                     className="EditInput"
@@ -224,7 +166,7 @@ function Debt(props) {
                     }}
                   />
                 ) : (
-                    value
+                  value
                 )}
               </div>
             );
@@ -232,9 +174,57 @@ function Debt(props) {
           editable: true,
         },
       },
+
+      {
+        name: "amount",
+        label: "AMount",
+        options: {
+          customBodyRender: (value, tableMeta, updateValue) => {
+            const rowIndex = tableMeta.rowIndex;
+            const isEditing = rowIndex === editingRow;
+  
+            return (
+              <div
+                style={{ paddingLeft: "12%" }}
+              >
+                              <span className="input-group-addon">$ </span>
+
+                {isEditing ? (
+                  <input
+                    className="EditInput"
+                    value={value}
+                    onChange={(e) => {
+                      updateValue(e.target.value);
+                    }}
+                  />
+                ) : (
+                  value
+                )}
+              </div>
+            );
+          },
+          editable: true,
+        },
+      },
+
+    {
+      name: "priceLbp",
+      label: "LBP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const rowIndex = tableMeta.rowIndex;
+          const isEditing = rowIndex === editingRow;
     
-
-
+          return (
+            <div style={{ paddingLeft: "12%" }}>
+              <span className="input-group-addon">Lbp </span>
+              {value} 
+            </div>
+          );
+        },
+        editable: false, 
+      },
+    }, 
       {
         name: "createdAt",
         label: "Date",
@@ -332,9 +322,9 @@ function Debt(props) {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       axios
-                        .delete(`debt/deleteDebt/${rowData[0]}`)
+                        .delete(`income/deleteIncome/${rowData[0]}`)
                         .then((response) => {
-                          toast.success("Debt deleted successfully")
+                          toast.success("Income deleted successfully")
                           getData();
                         })
                         .catch((err) => { 
@@ -381,7 +371,7 @@ function Debt(props) {
         </div>
       ) : (
         <div className="table-container">
-          <h1 className="titleOfPage "> Debt </h1>
+          <h1 className="titleOfPage "> Income </h1>
           <Box sx={{ maxWidth: "100%", margin: "auto" }}>
             <MUIDataTable
               title={
@@ -403,7 +393,7 @@ function Debt(props) {
                   className="addCoach"
                   onClick={openMembershipPopup}
                 >
-                  <span style={{ color: "#393A3C" }}>Add Debt</span>
+                  <span style={{ color: "#393A3C" }}>Add Income</span>
                 </Button>
               </div>
               }
@@ -413,7 +403,7 @@ function Debt(props) {
             // onRowsSelect={handleRowSelection} 
 
             />
-              <DebtPopup getData={getData} />
+              <IncomePopup getData={getData} />
           </Box>
           <ToastContainer />
         </div>
@@ -421,4 +411,4 @@ function Debt(props) {
     </>
   );
 }
-export default Debt;
+export default Income;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./addPaymentPopup.css";
+import "./addDebtPopup.css";
 import axios from "../../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
@@ -9,10 +9,10 @@ export default function PrgramPopup(props) {
   const [member, setMember] = useState("");
   const [name, setName] = useState("");
   const [time, setTime] = useState(null);
-  const [notes, setNotes] = useState(null);
+  const [category, setCategory] = useState(null);
   const [DataMember, setDataMembers] = useState([]);
   const [DataProgram, setDataPrograms] = useState([]);
-  const[priceLbp,setPriceLbp]=useState([]);
+  const[notes,setNotes]=useState([]);
   const [amount,setAmount]=useState([]);
 
 
@@ -29,25 +29,27 @@ export default function PrgramPopup(props) {
       });
   };
 
-
   useEffect(() => {
     getDataMembers();
   }, []);
 
-  const addPayment = async (e) => {
+
+
+
+  const addMembership = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("payment/createPayment", {
+      const response = await axios.post("debt/addDebt", {
         member,
-       amount,
+        amount,
        notes,
-       priceLbp
+
       });
       
       console.log(response)
 
-      toast.success("Payment was added");
+      toast.success("Debt was added");
       setTimeout(() => {
         toast.dismiss();
         closePopup();
@@ -64,16 +66,16 @@ export default function PrgramPopup(props) {
   };
 
   function closePopup() {
-    document.querySelector(".payment-popup").close();
+    document.querySelector(".debt-popup").close();
     document.getElementById("addForm").reset();
   }
 
   return (
-    <dialog className="payment-popup" id="modal">
+    <dialog className="debt-popup" id="modal">
       <div className="containerPopup">
         <div className="popUp">
           <AiOutlineClose onClick={closePopup} className="close-x"></AiOutlineClose>
-          <h2 className="formTitle">New Payment</h2>
+          <h2 className="formTitle">New Debt</h2>
 
           <form action="POSTToastContainer" method="dialog" id="addForm">
           <fieldset>
@@ -97,19 +99,11 @@ export default function PrgramPopup(props) {
     )}
   </select>
 </fieldset>
+
+
+
 <fieldset>
-              <label>Description</label>
-              <input
-                type="text"
-                required
-                placeholder="Example:Payment for old membership"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-              <FaRegMoneyBillAlt className="iconForm" />
-            </fieldset>
-<fieldset>
-              <label>Paid</label>
+              <label>Amount</label>
               <input
                 type="number"
                 required
@@ -120,9 +114,21 @@ export default function PrgramPopup(props) {
               <FaRegMoneyBillAlt className="iconForm" />
             </fieldset>
 
+            <fieldset>
+              <label>Description</label>
+              <input
+                type="text"
+                required
+                placeholder="Example: 300"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+              <FaRegMoneyBillAlt className="iconForm" />
+            </fieldset>
+
             <div className="btnsGrp">
               <button onClick={closePopup} className="closeBtn">Close</button>
-              <button onClick={addPayment} className="createBtn">Create</button>
+              <button onClick={addMembership} className="createBtn">Create</button>
             </div>
 
             <ToastContainer />

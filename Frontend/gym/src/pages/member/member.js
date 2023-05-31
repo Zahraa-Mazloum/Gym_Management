@@ -181,7 +181,6 @@ function Members(props) {
           return (
             <div
               style={{ paddingLeft: "12%" }}
-            // onClick={() => setEditingRow(rowIndex)}
             >
               {isEditing ? (
                 <input
