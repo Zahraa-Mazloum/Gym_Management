@@ -48,18 +48,24 @@ export const getExpenseById =asyncHandler(async (req, response) => {
     }
 })
 
-export const editExpense =asyncHandler(async (req, response) => {
-    let expense = req.body;
+export const editExpense = asyncHandler(async (req, res) => {
+  const { amount, description } = req.body;
 
-    const editExpense = new Expense(expense);
-    try{
-        await Expense.updateOne({_id: req.params.id}, editExpense);
-        response.status(201).json(editExpense);
-    } catch (error){
-        response.status(409).json({ message: error.message});     
+  try {
+    const updatedExpense = await Expense.findByIdAndUpdate(
+      req.params.id,
+      { amount, description },
+      { new: true }
+    );
+    if (!updatedExpense) {
+      return res.status(404).json({ message: 'Expense not found' });
     }
-}
-)
+    res.json(updatedExpense);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 export const deleteExpense = asyncHandler(async (req, response) => {
     try{

@@ -14,6 +14,10 @@ type:Number,
 required:[true,'Please add the amount'],
 
 },
+salary: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Salary',
+  },
 
 },
 

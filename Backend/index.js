@@ -16,6 +16,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import membershipRoutes from "./routes/membershipRoutes.js";
 import programRoutes from "./routes/programRoutes.js"
 import attendanceRoutes from "./routes/attendanceRoutes.js";
+import dollarRoutes from "./routes/dollarRate.js";
 
 
 
@@ -23,7 +24,7 @@ config()
 connectDB()
 const app = express()
 
-const port = process.env.Port || 5000;
+const port = process.env.PORT  ;
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
@@ -41,10 +42,11 @@ app.use('/salary',salaryRoutes)
 app.use('/expense',expenseRoutes)
 app.use('/income',incomeRoutes)
 app.use('/supplement',supplementRoutes)
-app.use('/paymentRoutes',paymentRoutes)
-app.use('/membershipRoutes',membershipRoutes)
-app.use('/programRoutes',programRoutes)
-app.use('/attendanceRoutes',attendanceRoutes)
+app.use('/payment',paymentRoutes)
+app.use('/membership',membershipRoutes)
+app.use('/program',programRoutes)
+app.use('/attendance',attendanceRoutes)
+app.use('/dollar',dollarRoutes)
 
 
 app.listen(port,(req,res)=>

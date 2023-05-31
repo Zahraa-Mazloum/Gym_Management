@@ -2,34 +2,39 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-const membershipSchema = new Schema({
-
-    start_day:{
-        type:Date,
-        
+const membershipSchema = new Schema(
+  {
+    amount: {
+      type: Number,
     },
- 
-    amount:{
-        type:Number,
-
+    member: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Member',
     },
- 
-  member:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Member',
+    program: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Program',
+    },
+    rate: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Dollar',
+    },
+    priceLbp: {
+      type: Number,
+    },
+    paid: {
+      type: Number,
+    },
+    end_date:{
+      type: Date,
+    }
   },
-  program:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Program',
-  },
-}, 
-{ timestamps:true 
 
-},{
-  collection: 'memberships',
-
-
-});
+  {
+    timestamps: true,
+    collection: 'memberships',
+  }
+);
 
 const Membership = model('Membership', membershipSchema);
 

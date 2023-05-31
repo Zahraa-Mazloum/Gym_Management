@@ -14,7 +14,12 @@ type:Number,
 required:[true,'Please add the amount'],
 
 },
-
+rate:{
+    type:String
+   },
+   priceLbp:{
+    type:Number
+}
 },
 
 { timestamps:true 

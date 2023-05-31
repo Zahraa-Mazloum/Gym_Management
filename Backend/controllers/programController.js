@@ -1,5 +1,6 @@
 import  Program from '../models/programModel.js';
 import asyncHandler from 'express-async-handler';
+import DollarRates from '../models/dollarRate.js';
 
 export const getPrograms = asyncHandler(async (req, response) => {
     try{
@@ -10,33 +11,42 @@ export const getPrograms = asyncHandler(async (req, response) => {
     }
 })
 
-export const addProgram= asyncHandler(async (req, res) => {
-    try {
-        const { name, day,time,category } = req.body;  
-      if (!name  || !day|| !time || !category ){
-        res.status(400);
-        throw new Error('Please enter all fields');
-      }
-  
-      const program = await Program.create({
-        name,
-        day,
-time,
-category        
-      });
-  
-      if (program) {
-        res.status(201).json({
-            program,
-        });
-      } else {
-        res.status(400);
-        throw new Error('invalid program data');
-      } 
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+
+export const addProgram = asyncHandler(async (req, res) => {
+  try {
+    const { coach, name, day, time, category, price } = req.body;
+
+    if (!name || !day || !time || !category || !price) {
+      res.status(400);
+      throw new Error('Please enter all fields');
     }
-  });
+
+    const latestDollarRate = await DollarRates.findOne().sort({ _id: -1 });
+
+    if (!latestDollarRate) {
+      res.status(404);
+      throw new Error('Dollar rate not found');
+    }
+
+    const priceLbp = price * latestDollarRate.dollarRate;
+
+    const program = await Program.create({
+      coach,
+      name, 
+      day,
+      time,
+      category,
+      price,
+      priceLbp
+    });
+
+    res.status(201).json({
+      program
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
   
 export const getProgramById =asyncHandler(async (req, response) => {
@@ -47,24 +57,48 @@ export const getProgramById =asyncHandler(async (req, response) => {
         response.status(404).json({ message: error.message })
     }
 })
-export const editProgram =  asyncHandler(async (req,res)=>{
-    const {name,day,time,category} = req.body;
-  
-    try {
-      const updatedProgram = await Program.findByIdAndUpdate(
-        req.params.id,
-        {name,day,time,category},
-        { new: true }
-      );
-      if (!updatedProgram) {
-        return res.status(404).json({ message: 'Program not found' });
-      }
-      res.json(updatedProgram);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
+import Dollar from '../models/dollarRate.js';
+
+export const editProgram = asyncHandler(async (req, res) => {
+  const { name, day, time, category, price } = req.body;
+
+  if (!Array.isArray(time)) {
+    return res.status(400).json({ message: 'Invalid time value' });
   }
-)
+
+  const timeString = time.join(', ');
+  const priceNumber = parseFloat(price);
+
+  if (isNaN(priceNumber)) {
+    return res.status(400).json({ message: 'Invalid price value' });
+  }
+
+  try {
+    const dollarRate = await DollarRates.findOne(); 
+
+    if (!dollarRate) {
+      res.status(400);
+      throw new Error('No dollar rate found');
+    }
+
+    const priceLbp = priceNumber * dollarRate.dollarRate; // Calculate the new price in LBP
+
+    const updatedProgram = await Program.findByIdAndUpdate(
+      req.params.id,
+      { name, day, time: timeString, category, price: priceNumber, priceLbp },
+      { new: true }
+    ).exec();
+
+    if (!updatedProgram) {
+      return res.status(404).json({ message: 'Program not found' });
+    }
+
+    res.json(updatedProgram);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 
 export const deleteProgram= asyncHandler(async (req, response) => {

@@ -14,9 +14,9 @@ export const getMembers = asyncHandler(async (req, response) => {
 // create new member
 export const addMember = asyncHandler(async (req, res) => {
     try {
-      const {first_name, middle_name, last_name, phone,gender,dob,address,bloodTypes,emergecnyPhone,isArmy} = req.body;
+      const {first_name, middle_name, last_name, phone,gender,date,address,emergencyPhone,army} = req.body;
   
-      if (!first_name || !middle_name || !last_name || !phone || !gender || !address || !isArmy ) {
+      if (!first_name || !middle_name || !last_name || !phone  || !address  ) {
         res.status(400);
         throw new Error('Please enter all fields');
       }
@@ -27,11 +27,12 @@ export const addMember = asyncHandler(async (req, res) => {
         last_name,
         phone,
         gender,
-        dob,
+        date,
         address,
-        bloodTypes,
-        emergecnyPhone,
-        isArmy
+        // bloodTypes,
+        emergencyPhone,
+        army,
+        status: 'inactive', 
       });
   
       if (member) {
@@ -58,18 +59,23 @@ export const getMemberById =asyncHandler(async (req, response) => {
     }
 })
 
-export const editMember =asyncHandler(async (req, response) => {
-    let member = req.body;
+export const editMember = asyncHandler(async (req, res) => {
+  try {
+    const member = req.body;
+    const updatedMember = await Member.findByIdAndUpdate(req.params.id, member, {
+      new: true
+    });
 
-    const editmember = new Member(member);
-    try{
-        await Member.updateOne({_id: req.params.id}, editmember);
-        response.status(201).json(editmember);
-    } catch (error){
-        response.status(409).json({ message: error.message});     
+    if (updatedMember) {
+      res.status(200).json(updatedMember);
+    } else {
+      res.status(404).json({ message: 'Member not found' });
     }
-}
-)
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 export const deleteMember = asyncHandler(async (req, response) => {
     try{

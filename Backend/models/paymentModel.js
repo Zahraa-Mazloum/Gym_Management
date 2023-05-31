@@ -9,11 +9,26 @@ const paymentSchema = new Schema({
         type:Number,
 
     },
- 
+     member:{
+      type:String
+
+     },
+
   membership:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Membership',
   },
+  notes:{
+    type:String
+   },
+   rate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Dollar',
+  },
+  priceLbp: {
+    type: Number,
+  },
+
 
 }, 
 { timestamps:true 

@@ -12,6 +12,9 @@ const salarySchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coach',
   },
+  priceLbp: {
+    type: Number,
+  },
 }, 
 { timestamps:true 
 

@@ -1,5 +1,6 @@
 import Income from '../models/incomeModel.js';
 import asyncHandler from 'express-async-handler';
+import Dollar from '../models/dollarRate.js';
 
 
 export const getIncomes = asyncHandler(async (req, response) => {
@@ -14,7 +15,11 @@ export const getIncomes = asyncHandler(async (req, response) => {
 export const addIncome = asyncHandler(async (req, res) => {
     try {
       const { description, amount } = req.body;
-  
+
+      const dollar = await Dollar.findOne();
+      const dollarRate = dollar.dollarRate;
+      const priceLbp=amount*dollarRate
+
       if (!description || !amount) {
         res.status(400);
         throw new Error('Please enter all fields');
@@ -23,6 +28,7 @@ export const addIncome = asyncHandler(async (req, res) => {
       const income = await Income.create({
         description,
         amount,
+        priceLbp:priceLbp,        
       });
   
       if (income) {
@@ -48,18 +54,27 @@ export const getIncomeById =asyncHandler(async (req, response) => {
     }
 })
 
-export const editIncome  =asyncHandler(async (req, response) => {
-    let income = req.body;
+export const editIncome = asyncHandler(async (req, res) => {
+  try {
+    const { description, amount } = req.body;
 
-    const editIncome = new Income (income);
-    try{
-        await Income.updateOne({_id: req.params.id}, editIncome);
-        response.status(201).json(editIncome);
-    } catch (error){
-        response.status(409).json({ message: error.message});     
-    }
-}
-)
+    const dollar = await Dollar.findOne();
+    const dollarRate = dollar.dollarRate;
+
+    const priceLbp = amount * dollarRate;
+
+    const updatedIncome = await Income.findByIdAndUpdate(
+      req.params.id,
+      { description, amount, priceLbp },
+      { new: true }
+    );
+
+    res.json(updatedIncome);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 export const deleteIncome = asyncHandler(async (req, response) => {
     try{

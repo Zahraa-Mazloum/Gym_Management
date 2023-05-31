@@ -12,32 +12,42 @@ export const getDebts = asyncHandler(async (req, response) => {
 })
 
 export const addDebt = asyncHandler(async (req, res) => {
-    try {
-        const { amount, notes, member } = req.body;  
-      if (!amount || !notes || !member) {
-        res.status(400);
-        throw new Error('Please enter all fields');
-      }
-  
-      const debt = await Debt.create({
-        amount,
-        notes,
-        member,
-        
+  try {
+    const { amount, notes, member } = req.body;
+
+    // Check if the member already has a debt
+    const existingDebt = await Debt.findOne({ member });
+
+    if (existingDebt) {
+      // Parse the existing amount as a number and add the new amount to it
+      const updatedAmount = Number(existingDebt.amount) + Number(amount);
+      
+      // Update the debt with the new amount and notes
+      existingDebt.amount = updatedAmount;
+      existingDebt.notes.push(notes);
+      existingDebt.notes = existingDebt.notes.join(" "); // Join the notes array with a space delimiter
+      await existingDebt.save();
+
+      res.status(200).json({
+        debt: existingDebt,
       });
-  
-      if (debt) {
-        res.status(201).json({
-          debt,
-        });
-      } else {
-        res.status(400);
-        throw new Error('invalid debt data');
-      } 
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+    } else {
+      // Create a new debt if the member doesn't have an existing debt
+      const newDebt = await Debt.create({
+        amount,
+        notes: [notes],
+        member,
+      });
+
+      res.status(201).json({
+        debt: newDebt,
+      });
     }
-  });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+  
 
   
 // Get a debt by id

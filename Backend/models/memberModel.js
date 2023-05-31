@@ -29,11 +29,11 @@ trim:true
 
 gender:{
     type:String,
-    required:[true,'Please add an gender'],
+    // required:[true,'Please add an gender'],
     trim:true,
 },
-dob:{
-    type:Date,
+date:{
+    type:String,
 },
 address:{
     type:String,
@@ -41,31 +41,29 @@ address:{
 trim:true
 },
 
-bloodTypes:{
-    type:String,
-    required:[true,'Please add a blood type'],
-    trim:true
-    },
-emergecnyPhone:{
+// bloodTypes:{
+//     type:String,
+//     // required:[true,'Please add a blood type'],
+//     trim:true
+//     },
+emergencyPhone:{
         type:String,
-        required:[true,'Please add a phone'],
+        // required:[true,'Please add a phone'],
         trim:true
         },
             
-isArmy:{
-    type:Boolean,
+        army:{
+    type:String,
 },
 //filled automatically
-status:{
-type:Boolean, 
-}
+// status:{
+// type:Boolean, 
+// }
 
 
 },
 
 { timestamps:true 
-
-},{ timestamps:true 
 
 },{
 collection:"Members",

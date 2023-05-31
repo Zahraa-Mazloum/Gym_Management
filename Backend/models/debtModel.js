@@ -7,13 +7,14 @@ const debtSchema = new Schema({
     type: Number,
     required: true,
   },
-  notes:{
+  notes:[{
     type:String
-  },
+  }],
   member:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Member',
   },
+
 }, 
 { timestamps:true 
 
