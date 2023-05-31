@@ -92,7 +92,6 @@ export const deleteSalary = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Salary not found' });
     }
 
-    // Find and delete the related expense using the salary ID
     await Expense.findOneAndDelete({ salary: deletedSalary._id });
 
     res.status(201).json({ message: 'Salary deleted successfully' });
