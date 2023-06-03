@@ -68,7 +68,7 @@ console.log(response)
 
   <dialog className="member-popup" id='modal'>
     <div className="containerPopup">
-<div className="popUp">
+<div className="popUpMember">
       <AiOutlineClose onClick={closePopup} className="close-x"></AiOutlineClose>
       <h2 className="formTitle">New Member</h2>
   

@@ -83,11 +83,16 @@ export default function SalaryPopup(props) {
 
   
 >
-  {DataCoach.map((c) => (
+
+    <>
+            <option value="">Select a coach</option> {/* First option */}
+            {DataCoach.map((c) => (
     <option key={c._id} value={c._id}>
       {`${c.first_name} ${c.last_name}`}
     </option>
+
   ))}
+      </>
 </select>
 
             </fieldset>
