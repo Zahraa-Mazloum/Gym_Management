@@ -274,7 +274,7 @@ function Membership(props) {
       
             return (
               <div style={{ paddingLeft: "12%" }}>
-                <span className="input-group-addon">Lbp </span>
+                <span className="input-group-addon">LBP </span>
                 {value} 
               </div>
             );

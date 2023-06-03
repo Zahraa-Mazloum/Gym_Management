@@ -1,76 +1,115 @@
-.card {
-    background-color: var(--secondary-color);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-top: 50px;
-    width:100%
-  }
-  .card-content{
-    display: flex;
-  }
-  
-  .card-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .card-text {
-    font-size: 16px;
-    margin-top: 31px;
-    margin-left: 15px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--primary-color);
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .btn {
-    font-size: 14px;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
+.cardDollar {
+  background-color: #f3f4f5;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 50px;
+  width: 88%; 
+}
+.card-content{
+  display: flex;
+}
 
-  }
-  
-  .btnRate {
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    margin-top: 10px;
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-  }
-    
-  .btnRate:hover {
-    background-color: var(--dark-color);
-    color: var(--secondary-color);
-    border: none;
-    margin-top: 10px;
+.card-text {
+  font-size: 16px;
+  margin-top: 31px;
+  margin-left: 15px;
+}
 
-  }
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+
+}
+.btn:hover {
+  background-color: var(--dark-color);
+  color: var(--secondary-color);
+  border: none;
+
+
+}
+/* .btnRate {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  margin-top: 10px;
+
+}
   
-  .btn-link {
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    padding: 10px;
-    cursor: pointer;    
-    border-radius: 4px;
-    margin-left: 50px;
-  }
-  
+.btnRate:hover {
+  background-color: var(--dark-color);
+  color: var(--secondary-color);
+  border: none;
+
+} */
+
+.btn-link {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 10px;
+  cursor: pointer;    
+  border-radius: 4px;
+  margin-left: 50px;
+}
+
+
+ 
+.sub-detail{
+  font-weight:500;
+  width: 80px;
+  background-color: transparent;
+  outline: none;
+  border: solid 1px transparent;
+  font-size: large;
+  margin-left: .5rem;
+}
+.edit-border{
+  /* outline: black; */
+  border: solid 1px black;
+}
+.edit-dolar-rate{
+  cursor:pointer;
+  font-size: x-large;
+  margin-bottom: -4px;
+  margin-left:3%
+} 
+
+
+.edit-dolar-rate:hover{
+  color:var(--primary-color);
+}
+.finance-details span{
+  font-weight: normal;
+
+}
+
+.lbpCurrency{
+  margin-left:-10%
+}

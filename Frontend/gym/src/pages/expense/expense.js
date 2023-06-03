@@ -205,6 +205,24 @@ function Expenses(props) {
     },
 
     {
+      name: "priceLbp",
+      label: "LBP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const rowIndex = tableMeta.rowIndex;
+          const isEditing = rowIndex === editingRow;
+    
+          return (
+            <div style={{ paddingLeft: "12%" }}>
+              <span className="input-group-addon">Lbp </span>
+              {value} 
+            </div>
+          );
+        },
+        editable: false, 
+      },
+    }, 
+    {
         name: "createdAt",
         label: "Date",
         options: {

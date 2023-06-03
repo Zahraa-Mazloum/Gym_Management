@@ -269,7 +269,7 @@ function Income(props) {
                       if (result.isConfirmed) {
                         handleUpdate(rowData);
                         getData()
-                        toast.success('Debt edited successfully')
+                        toast.success('Income edited successfully')
                       }
                     });
                   }}
@@ -347,7 +347,7 @@ function Income(props) {
     selectableRows: "multiple",
     selectToolbarPlacement: "replace",
     search: true,
-    searchPlaceholder: "Search for Debt",
+    searchPlaceholder: "Search for Income",
     onSearchChange: (searchValue) => handleSearch(searchValue),
     download: true,
     print: false,

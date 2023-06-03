@@ -1,3 +1,34 @@
-.dollarRates{
-    margin-top: 50%;
+.dashboardPage{
+  /* padding: 15px; */
+    display: flex;
+    flex-direction: column;
+    /* gap: 25px */
+    width: 100%;
+  }
+
+  .firstLineDashboard{
+    display: flex;
+    justify-content: space-around;
+    gap:2%;
+    margin-top:5%
+
 }
+
+.cardDashboard{
+  border: 1px solid var(--secondary-color);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width:30%;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  line-height: 30px;
+}
+
+.firstLineFinance {
+  display: flex;
+  justify-content: space-around;
+  gap:2%;
+}
+

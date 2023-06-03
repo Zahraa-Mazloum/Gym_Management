@@ -18,7 +18,9 @@ salary: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Salary',
   },
-
+  priceLbp:{
+    type:Number
+}
 },
 
 { timestamps:true 
