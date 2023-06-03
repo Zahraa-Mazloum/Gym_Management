@@ -2,6 +2,7 @@ import Salary from '../models/salaryModel.js';
 import Expense from '../models/expenseModel.js';
 import asyncHandler from 'express-async-handler';
 import Coach from '../models/coachModel.js';
+import Dollar from '../models/dollarRate.js'
 
 export const getSalaries = asyncHandler(async (req, res) => {
   try {
@@ -15,24 +16,34 @@ export const getSalaries = asyncHandler(async (req, res) => {
 export const addSalary = asyncHandler(async (req, res) => {
   try {
     const { amount, coach } = req.body;
+
+    const dollar = await Dollar.findOne();
+    const dollarRate = dollar.dollarRate;
+    const priceLbp=amount*dollarRate
+
     if (!amount || !coach) {
       res.status(400);
       throw new Error('Please enter all fields');
     }
 
+
     const salary = await Salary.create({
       amount,
       coach,
+      priceLbp:priceLbp, 
     });
 
-    // Create a new expense related to the salary
     const coachData = await Coach.findById(coach);
     const description = `Salary for ${coachData.first_name} ${coachData.last_name}`;
+    const dollars= await Dollar.findOne();
+    const dollarRates = dollars.dollarRate;
+    const priceLBP=amount*dollarRates
 
     const expense = await Expense.create({
       salary: salary._id,
       amount,
       description,
+      priceLbp:priceLBP,
     });
 
     if (salary && expense) {

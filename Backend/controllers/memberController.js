@@ -76,6 +76,55 @@ export const editMember = asyncHandler(async (req, res) => {
   }
 });
 
+// export const getMemberLocations = async (req, res) => {
+//   try {
+//     const members = await Member.find({ location: { $ne: '' } });
+
+//     const locations = [];
+//     members.forEach((member) => {
+//       const { location } = member;
+//       if (locations[location]) {
+//         locations[location]++;
+//       } else {
+//         locations[location] = 1;
+//       }
+//     });
+
+//     res.json(locations);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+
+
+
+
+
+export const getMemberLocations = async (req, res) => {
+  try {
+    const result = await Member.aggregate([
+      {
+        $group: {
+          _id: "$address", 
+          count: { $sum: 1 } 
+        }
+      },
+      {
+        $project: {
+          _id: 0, 
+          location: "$_id", 
+          count: 1 
+        }
+      }
+    ]).exec();
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 export const deleteMember = asyncHandler(async (req, response) => {
     try{
@@ -86,5 +135,5 @@ export const deleteMember = asyncHandler(async (req, response) => {
     }
 })
 
-const memberRoutes = { getMembers, getMemberById, addMember, editMember, deleteMember }
+const memberRoutes = { getMembers, getMemberById, addMember, editMember, deleteMember ,getMemberLocations}
 export default memberRoutes  

@@ -1,5 +1,6 @@
 import Expense from '../models/expenseModel.js';
 import asyncHandler from 'express-async-handler';
+import Dollar from '../models/dollarRate.js';
 
 
 export const getExpenses = asyncHandler(async (req, response) => {
@@ -14,6 +15,10 @@ export const getExpenses = asyncHandler(async (req, response) => {
 export const addExpense = asyncHandler(async (req, res) => {
     try {
       const { description, amount } = req.body;
+
+      const dollar = await Dollar.findOne();
+      const dollarRate = dollar.dollarRate;
+      const priceLbp=amount*dollarRate
   
       if (!description || !amount) {
         res.status(400);
@@ -23,6 +28,7 @@ export const addExpense = asyncHandler(async (req, res) => {
       const expense = await Expense.create({
         description,
         amount,
+        priceLbp:priceLbp, 
       });
   
       if (expense) {
