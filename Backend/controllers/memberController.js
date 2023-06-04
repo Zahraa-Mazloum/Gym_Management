@@ -1,5 +1,6 @@
 import Member from '../models/memberModel.js';
 import asyncHandler from 'express-async-handler';
+import Membership from '../models/membershipModel.js'
 
 // Get all members
 export const getMembers = asyncHandler(async (req, response) => {
@@ -10,6 +11,9 @@ export const getMembers = asyncHandler(async (req, response) => {
         response.status(404).json({ message: error.message })
     }
 })
+
+
+
 
 // create new member
 export const addMember = asyncHandler(async (req, res) => {
@@ -76,30 +80,6 @@ export const editMember = asyncHandler(async (req, res) => {
   }
 });
 
-// export const getMemberLocations = async (req, res) => {
-//   try {
-//     const members = await Member.find({ location: { $ne: '' } });
-
-//     const locations = [];
-//     members.forEach((member) => {
-//       const { location } = member;
-//       if (locations[location]) {
-//         locations[location]++;
-//       } else {
-//         locations[location] = 1;
-//       }
-//     });
-
-//     res.json(locations);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-
-
-
-
 
 export const getMemberLocations = async (req, res) => {
   try {
@@ -134,6 +114,32 @@ export const deleteMember = asyncHandler(async (req, response) => {
         response.status(409).json({ message: error.message});     
     }
 })
+
+// export const updateMemberActiveStatus = async (req, res) => {
+//   try {
+//     const members = await Member.find();
+
+//     for (const member of members) {
+//       const latestMembership = await Membership.findOne({ member: member._id }).sort({ end_date: -1 });
+
+//       if (latestMembership) {
+//         const currentDate = new Date();
+//         const latestEndDate = new Date(latestMembership.end_date);
+
+//         member.active = latestEndDate > currentDate;
+//       } else {
+//         member.active = false;
+//       }
+
+//       await member.save();
+//     }
+
+//     res.status(200).json({ message: 'Member active status updated successfully' });
+//   } catch (error) {
+//     console.error('Failed to update member active status:', error);
+//     res.status(500).json({ message: 'Failed to update member active status' });
+//   }
+// };
 
 const memberRoutes = { getMembers, getMemberById, addMember, editMember, deleteMember ,getMemberLocations}
 export default memberRoutes  

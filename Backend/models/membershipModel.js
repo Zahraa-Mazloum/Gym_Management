@@ -27,6 +27,10 @@ const membershipSchema = new Schema(
     },
     end_date:{
       type: Date,
+    },
+    messageSent: {
+      type: Boolean,
+      default: false
     }
   },
 

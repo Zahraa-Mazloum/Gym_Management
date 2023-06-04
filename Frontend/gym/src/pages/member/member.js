@@ -17,7 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import Button from "@mui/material/Button";
 import 'react-toastify/dist/ReactToastify.css';
 import {RiUserAddLine} from 'react-icons/ri';
-import Switch from 'react-toggle-switch';
 import 'react-toggle-switch/dist/css/switch.min.css';
 
 
@@ -436,36 +435,36 @@ function Members(props) {
           editable: true,
         },
       },
-      {
-        name: "status",
-        label: "Active",
-        options: {
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const rowIndex = tableMeta.rowIndex;
-            const isEditing = rowIndex === editingRow;
+      // {
+      //   name: "active",
+      //   label: "Active",
+      //   options: {
+      //     customBodyRender: (value, tableMeta, updateValue) => {
+      //       const rowIndex = tableMeta.rowIndex;
+      //       const isEditing = rowIndex === editingRow;
   
-            return (
-              <div
-                style={{ paddingLeft: "9%" }}
-              // onClick={() => setEditingRow(rowIndex)}
-              >
-                {isEditing ? (
-                  <input
-                    className="EditInput"
-                    value={value}
-                    onChange={(e) => {
-                      updateValue(e.target.value);
-                    }}
-                  />
-                ) : (
-                  value
-                )}
-              </div>
-            );
-          },
-          editable: true,
-        },
-      },
+      //       return (
+      //         <div
+      //           style={{ paddingLeft: "9%" }}
+      //         // onClick={() => setEditingRow(rowIndex)}
+      //         >
+      //           {isEditing ? (
+      //             <input
+      //               className="EditInput"
+      //               value={value}
+      //               onChange={(e) => {
+      //                 updateValue(e.target.value);
+      //               }}
+      //             />
+      //           ) : (
+      //             value
+      //           )}
+      //         </div>
+      //       );
+      //     },
+      //     editable: true,
+      //   },
+      // },
       
       
     // {
