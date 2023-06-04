@@ -91,13 +91,13 @@ const Sidebar = () => {
   };
 
   return (
-    <div className={`sidebar ${isSidebarClosed ? 'close' : ''}`} style={{ maxWidth: '1438px' }}>
+    <div className={`sidebar ${isSidebarClosed ? 'close' : ''}`} style={{ maxWidth: '1500px' }}>
       <div className="hamburger-menu" onClick={handleSidebarToggle}>
         <i className={`bx ${isSidebarClosed ? 'bx-menu' : 'bx-x'}`}></i>
       </div>
       <div className="logo-details">
         {isSidebarClosed ? (
-          <span className="title">O<sub>2</sub>xygen</span>
+          <span className="titleSidebar">O<sub>2</sub>xygen</span>
         ) : (
           <img src={Image} alt="Image" />
         )}

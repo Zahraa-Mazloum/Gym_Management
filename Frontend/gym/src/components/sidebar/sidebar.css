@@ -13,7 +13,7 @@
   transition: all 0.7s;
 }
 .sidebar.close {
-  width: 78px;
+  width: 94px;
 }
  .logo-details {
   height: 17%;
@@ -105,6 +105,7 @@ color :var(--secondary-color);
   font-weight: 400;
   color: var(--secondary-color);
   transition: all 0.4s ease;
+  
 }
 .sidebar.close .nav-links li a .link_name {
   opacity: 0;
@@ -144,7 +145,9 @@ color :var(--secondary-color);
   display: block;
   pointer-events: none;
   transition: 0s;
+  z-index: 9999 ;
 }
+
 .sidebar.close .nav-links li:hover .sub-menu {
   top: 0;
   opacity: 1;
@@ -245,6 +248,12 @@ color :var(--secondary-color);
   margin: 0 15px;
   cursor: pointer;
 }
+.close .bx-menu{
+  color:var(--dark-color);
+    font-size: 25px;
+  margin-left: -15px;
+
+}
 .home-section .home-content .text {
   font-size: 26px;
   font-weight: 600;
@@ -269,7 +278,15 @@ color :var(--secondary-color);
     left: 0;
   }
 }
-
+.titleSidebar{
+  color:var(--secondary-color);
+  margin-left: 8px;
+  font-size:20px
+}
+.bx-x{
+  color:var(--secondary-color);
+  font-size: 25px;
+}
 
 @media (max-width: 1619px) {
   .sidebar .nav-links li i.arrow {

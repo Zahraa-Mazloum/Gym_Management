@@ -40,7 +40,10 @@ address:{
     required:[true,'Please add an address'],
 trim:true
 },
-
+active: {
+    type: Boolean,
+    default: false,
+  },
 // bloodTypes:{
 //     type:String,
 //     // required:[true,'Please add a blood type'],
@@ -69,6 +72,7 @@ emergencyPhone:{
 collection:"Members",
 
 }
+
 );
 
 

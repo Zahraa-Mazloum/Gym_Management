@@ -5,17 +5,45 @@ import Payment from '../models/paymentModel.js';
 import Income from '../models/incomeModel.js';
 import Member from'../models/memberModel.js';
 import Program from '../models/programModel.js';
-import Dollar from '../models/dollarRate.js'
+import Dollar from '../models/dollarRate.js';
+import schedule from 'node-schedule';
+import twilio from 'twilio';
 
-export const getMemberships = asyncHandler(async (req, res) => {
+
+
+const accountSid = 'AC8da996ada6d445ed1eed1b8f98b04c29';
+const authToken = '8529f60f9973760c22679d3ff23786c2';
+const twilioClient = twilio(accountSid, authToken);
+const sendWhatsAppMessage = (phoneNumber, message) => {
+  return new Promise((resolve, reject) => {
+    twilioClient.messages
+      .create({
+        from: 'whatsapp:+14155238886',
+        body: `[o2xygen_gym] ${message}`,
+        to: `whatsapp:${phoneNumber}`
+      })
+      .then(message => {
+        console.log('WhatsApp message sent:', message.sid);
+        resolve(message.sid);
+      })
+      .catch(error => {
+        console.error('Failed to send WhatsApp message:', error);
+        reject(error); 
+      });
+  });
+};
+
+const markMessageAsSent = async (membershipId) => {
   try {
-    const memberships = await Membership.find().populate('member program');
-    res.status(200).json(memberships);
+    const membership = await Membership.findById(membershipId);
+    if (membership) {
+      membership.messageSent = true;
+      await membership.save();
+    }
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    console.error('Failed to mark message as sent:', error);
   }
-});
-
+};
 
 export const addMembership = asyncHandler(async (req, res) => {
   try {
@@ -28,6 +56,23 @@ export const addMembership = asyncHandler(async (req, res) => {
 
     const memberData = await Member.findById(member);
     const memberName = `${memberData.first_name} ${memberData.middle_name} ${memberData.last_name}`;
+
+    const existingMemberships = await Membership.find({ member });
+
+    if (existingMemberships.length === 0) {
+      const programData = await Program.findById(program);
+      const programName = programData.name;
+      const welcomeMessage = `Welcome to the gym, ${memberName}! You have joined the ${programName} program. We are excited to have you as a new member.`;
+      await sendWhatsAppMessage(memberData.phone, welcomeMessage);
+    } else {
+      const programData = await Program.findById(program);
+      const programName = programData.name;
+      const welcomeBackMessage = `Welcome back, ${memberName}! You have joined the ${programName} program again. We are happy to see you in our gym.`;
+      await sendWhatsAppMessage(memberData.phone, welcomeBackMessage);
+    }
+
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
 
     const programData = await Program.findById(program);
     const programName = programData.name;
@@ -45,7 +90,20 @@ export const addMembership = asyncHandler(async (req, res) => {
       rate: dollar._id,
       paid,
       priceLbp,
-      end_date: new Date().setMonth(new Date().getMonth() + 1),
+      end_date: endDate,
+      messageSent: false,
+    });
+
+    const membershipEndsTomorrowMessage = `Your ${programName} membership will end tomorrow. Thank you for being a part of our gym!`;
+
+    const createdAt = membership.createdAt.getTime(); 
+
+    const twoMinutesDelay = 2 * 60 * 1000; 
+    const delayFromCreation = createdAt + twoMinutesDelay - Date.now();
+
+    const job = schedule.scheduleJob(new Date(Date.now() + delayFromCreation), async () => {
+      await sendWhatsAppMessage(memberData.phone, membershipEndsTomorrowMessage);
+      await markMessageAsSent(membership._id);
     });
 
     if (paid < programAmount) {
@@ -64,25 +122,25 @@ export const addMembership = asyncHandler(async (req, res) => {
         });
       }
     }
-    const priceLbpPayment=paid*dollarRate
+
+    const priceLbpPayment = paid * dollarRate;
 
     const payment = await Payment.create({
       amount: paid,
-      member:memberName,
+      member: memberName,
       membership: membership._id,
       notes: programName,
-      priceLbp:priceLbpPayment,
+      priceLbp: priceLbpPayment,
     });
 
     const descriptionIncome = `Payment from ${memberName}`;
 
     const income = await Income.create({
-      description:descriptionIncome,
+      description: descriptionIncome,
       amount: paid,
       rate: dollar._id,
       priceLbp: priceLbpPayment,
     });
-
 
     res.status(201).json({ membership, payment });
   } catch (error) {
@@ -90,6 +148,45 @@ export const addMembership = asyncHandler(async (req, res) => {
   }
 });
 
+schedule.scheduleJob('0 0 * * *', async () => {
+  // Schedule this job to run at midnight (0:00) every day
+  const memberships = await Membership.find({ messageSent: false });
+
+  memberships.forEach(async (membership) => {
+    const endDate = new Date(membership.end_date);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    if (endDate.toDateString() === tomorrow.toDateString()) {
+      const member = await Member.findById(membership.member);
+      const program = await Program.findById(membership.program);
+      const programName = program.name;
+
+      const membershipEndsTomorrowMessage = `Your ${programName} membership will end tomorrow. Thank you for being a part of our gym!`;
+
+      await sendWhatsAppMessage(member.phone, membershipEndsTomorrowMessage);
+      await markMessageAsSent(membership._id);
+    }
+  });
+});
+
+export const getMembersWhoReceivedMessage = asyncHandler(async (req, res) => {
+  try {
+    const members = await Membership.find({ messageSent: true }).populate('member');
+    res.json({ members });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+export const getMemberships = asyncHandler(async (req, res) => {
+  try {
+    const memberships = await Membership.find().populate('member program');
+    res.status(200).json(memberships);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
 
 
 
@@ -132,6 +229,29 @@ export const deleteMembership = asyncHandler(async (req, response) => {
   }
 })
 
-const membershipRoutes = {getMemberships,addMembership,getMembershipById,updateMembership,deleteMembership};
+
+export const getCurrentMonthMemberCount = async (req, res) => {
+  try {
+    const currentMonth = new Date().getMonth() + 1; 
+    const currentYear = new Date().getFullYear(); 
+    const startOfMonth = new Date(currentYear, currentMonth - 1, 1);
+    const endOfMonth = new Date(currentYear, currentMonth, 0); 
+
+    const memberships = await Membership.find({
+      createdAt: { $gte: startOfMonth, $lte: endOfMonth },
+    }).distinct('member');
+
+    const memberCount = memberships.length;
+
+    res.json({ count: memberCount });
+  } catch (error) {
+    console.error('Failed to fetch member count:', error.message);
+    res.status(500).json({ message: 'Failed to fetch member count' });
+  }
+};
+
+
+
+const membershipRoutes = {getMemberships,addMembership,getMembershipById,updateMembership,deleteMembership,getMembersWhoReceivedMessage,getCurrentMonthMemberCount};
 
 export default membershipRoutes;
