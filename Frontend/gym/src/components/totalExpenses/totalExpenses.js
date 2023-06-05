@@ -40,9 +40,9 @@ const ExpenseComponent = () => {
       {currentMonthTotalExpense !== null && previousMonthTotalExpense !== null && expenses !== null ? (
         <div>
           <h4 className='finance-details'>Total expenses for this month:<span className='sub-detail'>${currentMonthTotalExpense}</span> </h4>
-          {expenses > 0 && <span className="compareExp">{percentageChange}% more than the previous month</span>}
+          {/* {expenses > 0 && <span className="compareExp">{percentageChange}% more than the previous month</span>}
           {expenses < 0 && <span className="compareExp">{Math.abs(percentageChange)}% less than the previous month</span>}
-          {expenses === 0 && <span className="compareExp">No change in expenses from the previous month</span>}
+          {expenses === 0 && <span className="compareExp">No change in expenses from the previous month</span>} */}
         </div>
       ) : (
         <p>Loading...</p>

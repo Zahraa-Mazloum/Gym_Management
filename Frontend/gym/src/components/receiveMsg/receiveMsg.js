@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios.js';
-import './receiveMsg.css'
+import './receiveMsg.css';
+
 const MembersWhoReceivedMessage = () => {
   const [members, setMembers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [membersPerPage] = useState(5);
+  const [membersPerPage] = useState(3); // Change the value to 3
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -21,14 +22,10 @@ const MembersWhoReceivedMessage = () => {
     fetchMembers();
   }, []);
 
-  // Calculate index of the last member on the current page
   const indexOfLastMember = currentPage * membersPerPage;
-  // Calculate index of the first member on the current page
   const indexOfFirstMember = indexOfLastMember - membersPerPage;
-  // Get the current page of members
   const currentMembers = members.slice(indexOfFirstMember, indexOfLastMember);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -47,7 +44,7 @@ const MembersWhoReceivedMessage = () => {
           </ul>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <nav>
-              <ul className="pagination">
+              <ul className="pagination" style={{ flexDirection: 'row' }}>
                 {Array.from({ length: Math.ceil(members.length / membersPerPage) }, (_, index) => (
                   <li key={index} className={currentPage === index + 1 ? 'active' : ''}>
                     <button onClick={() => paginate(index + 1)}>{index + 1}</button>
