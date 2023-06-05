@@ -23,7 +23,7 @@ const MembershipsThisMonth = () => {
   return (
     <div>
       {error && <p>{error}</p>}
-      <h4 className='finance-details'>Total members for this month:<span className='sub-detail'>${memberCount}</span> </h4>
+      <h4 className='finance-details'>Total members for this month:<span className='sub-detail'>{memberCount}</span> </h4>
 
     </div>
   );
