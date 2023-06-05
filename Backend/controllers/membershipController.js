@@ -12,8 +12,11 @@ import {config} from "dotenv";
 
 config()
 
+
 const accountSid = process.env.SID;
 const authToken = process.env.AUTHTOKEN;
+
+
 const twilioClient = twilio(accountSid, authToken);
 const sendWhatsAppMessage = (phoneNumber, message) => {
   return new Promise((resolve, reject) => {
