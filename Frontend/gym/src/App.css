@@ -25,7 +25,7 @@ body{
 .HeigthofPage{
     display: flex;
     justify-content: center;
-    width:1600px;
+    width:98%;
     height:96vh;
     margin: 17px 0px 0px 15px;
     background-color: #D3D4D5;
@@ -33,7 +33,7 @@ body{
 }
 .expanded .HeigthofPage  {
  
-    width:1755px;  }
+    width:100%;  }
   
 @media only screen and (max-width: 600px) {
     .Header{
