@@ -105,7 +105,7 @@ const Sidebar = () => {
       </div>
       <div className="logo-details">
         {isSidebarClosed ? (
-          <span className="titleSidebar">O<sub>2</sub>xygen</span>
+          <span></span>
         ) : (
           <img src={Image} alt="Image" />
         )}

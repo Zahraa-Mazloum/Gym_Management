@@ -11,8 +11,8 @@ import twilio from 'twilio';
 
 
 
-const accountSid = 'AC8da996ada6d445ed1eed1b8f98b04c29';
-const authToken = '8529f60f9973760c22679d3ff23786c2';
+const accountSid = process.env.SID;
+const authToken = procees.env.AUTHTOKEN;
 const twilioClient = twilio(accountSid, authToken);
 const sendWhatsAppMessage = (phoneNumber, message) => {
   return new Promise((resolve, reject) => {

@@ -35,9 +35,9 @@ function Header () {
                 <span> {datenow.getDate()} {getmonth()} {datenow.getFullYear()}  </span>
                 </div>
             </div>
-            <div className="not" >
+            {/* <div className="not" >
             <IoMdNotifications style={{color:"#393A3C"}}/>
-            </div>
+            </div> */}
        
         </div>
     </div>
