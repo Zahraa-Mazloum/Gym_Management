@@ -7,7 +7,8 @@ import { RxDashboard } from 'react-icons/rx';
 import {FaUsers} from 'react-icons/fa';
 import { Url } from '../layout.js';
 import {MdSportsGymnastics ,MdOutlineAttachMoney} from 'react-icons/md'
-import {GiMasonJar} from 'react-icons/gi'
+import {GiMasonJar} from 'react-icons/gi';
+import {HiOutlineLogout} from 'react-icons/hi'
 
 const Sidebar = () => {
   const location = useLocation();
@@ -20,6 +21,13 @@ const Sidebar = () => {
     const arrowParent = e.target.closest('.arrow').parentElement.parentElement;
     arrowParent.classList.toggle('showMenu');
   };
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    window.location.href = '/login'; 
+  };
+
+
 
   const activeStyle = {
     backgroundColor: '#393A3C',
@@ -77,13 +85,13 @@ const Sidebar = () => {
         { id: 3, name: 'Expenses',link:'/Expense' },
       ],
     },
-    {
-      id: 4,
-      icon: <GiMasonJar/>,
-      name: 'Supplement',
-      link: '/Dashboard',
+    // {
+    //   id: 4,
+    //   icon: <GiMasonJar/>,
+    //   name: 'Supplement',
+    //   link: '/Dashboard',
 
-    },
+    // },
   ];
 
   const isLinkActive = (link) => {
@@ -133,6 +141,18 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
+  
+      <div className="base_bar">
+  <button className="logout-button" onClick={handleLogout}>
+    <HiOutlineLogout />
+    {isSidebarClosed ? (
+      <span className="lgt">Logout</span>
+    ) : (
+      <span>Logout</span>
+    )}
+  </button>
+</div>
+
     </div>
   );
 };

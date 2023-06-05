@@ -12,6 +12,32 @@
   position: relative;
   transition: all 0.7s;
 }
+
+.base_bar{
+  width: 70%;
+  height: 15%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: right;
+  margin-left: 7px;
+  font-size: 25px;
+}
+.logout-button {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 22px;
+  gap: 10px;
+  padding: 17px;
+  color: var(--secondary-color);
+  border: transparent;
+  border-radius: 15px;
+  transition: all 0.4s;
+  background-color: transparent;
+}
+.lgt {
+  display: none;
+}
 .sidebar.close {
   width: 94px;
 }

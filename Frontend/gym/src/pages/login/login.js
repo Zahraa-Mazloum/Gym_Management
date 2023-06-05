@@ -19,12 +19,22 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
   const from = location.state?.from?.pathname || "/dashboard";
-  useEffect(() => {
-    document.title = "Login";
-  },[]);
 
+ useEffect(() => {
+    const handleResize = () => {
+      setShowPlaceholder(window.innerWidth > 800);
+    };
 
+    window.addEventListener('resize', handleResize);
+
+    setShowPlaceholder(window.innerWidth > 800);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,7 +96,7 @@ console.log(email)
               <input
                 type="text"
                 className="inputLogin"
-                placeholder="example@gmail.com"
+                placeholder={showPlaceholder ? 'example@gmail.com' : ''}
                 required
                 autoComplete="off"
                 value={email}
@@ -101,7 +111,7 @@ console.log(email)
               <input
                 type="password"
                 className="inputLogin"
-                placeholder="*********"
+                                placeholder={showPlaceholder ? '*********' : ''}
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
