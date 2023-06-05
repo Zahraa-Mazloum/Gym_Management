@@ -8,11 +8,15 @@ import Program from '../models/programModel.js';
 import Dollar from '../models/dollarRate.js';
 import schedule from 'node-schedule';
 import twilio from 'twilio';
+import {config} from "dotenv";
 
+config()
 
 
 const accountSid = process.env.SID;
-const authToken = procees.env.AUTHTOKEN;
+const authToken = process.env.AUTHTOKEN;
+
+
 const twilioClient = twilio(accountSid, authToken);
 const sendWhatsAppMessage = (phoneNumber, message) => {
   return new Promise((resolve, reject) => {
